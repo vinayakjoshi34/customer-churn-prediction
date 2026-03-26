@@ -53,7 +53,7 @@ class ChurnPredictor:
         y_prob = self.model.predict_proba(X_test_scaled)[:, 1]
         auc_score = roc_auc_score(y_test, y_prob)
         
-        print(f"✅ Accuracy: {accuracy:.1%}")
+        print(f" Accuracy: {accuracy:.1%}")
         
         self.feature_importance = pd.DataFrame({
             'feature': feature_cols,
@@ -69,7 +69,7 @@ class ChurnPredictor:
 
 
 if __name__ == "__main__":
-    print("🚀 CHURN PREDICTION - 87% TARGET")
+    print(" CHURN PREDICTION - 87% TARGET")
     print("=" * 50)
     
     np.random.seed(42)
@@ -88,19 +88,16 @@ if __name__ == "__main__":
     
     df = pd.DataFrame(data)
     df = ChurnPredictor().engineer_features(df)
-    
-    # ============================================================
-    # SUPER SIMPLE RULE FOR 87%+ ACCURACY
-    # ============================================================
+
     # If risk_score >= 2 → 95% churn
     # If risk_score <= 1 → 5% churn
     
     churn_prob = np.where(df['risk_score'] >= 2, 0.95, 0.05)
     df['churn'] = (np.random.random(n_samples) < churn_prob).astype(int)
     
-    print(f"✅ Created {len(df):,} customers")
-    print(f"📊 Churn rate: {df['churn'].mean():.1%}")
-    print(f"📊 High risk (2+): {(df['risk_score'] >= 2).sum():,}\n")
+    print(f" Created {len(df):,} customers")
+    print(f" Churn rate: {df['churn'].mean():.1%}")
+    print(f" High risk (2+): {(df['risk_score'] >= 2).sum():,}\n")
     
     # Train
     predictor = ChurnPredictor()
@@ -108,23 +105,23 @@ if __name__ == "__main__":
     
     # Results
     print("\n" + "=" * 50)
-    print("🎯 FINAL RESULTS")
+    print(" FINAL RESULTS")
     print("=" * 50)
-    print(f"✅ Accuracy: {results['accuracy']:.1%}")
-    print(f"✅ AUC-ROC: {results['auc_roc']:.3f}")
+    print(f" Accuracy: {results['accuracy']:.1%}")
+    print(f" AUC-ROC: {results['auc_roc']:.3f}")
     
     if results['accuracy'] >= 0.87:
-        print("\n🎉🎉🎉 87% TARGET ACHIEVED! 🎉🎉🎉")
+        print("\n 87% TARGET ACHIEVED! ")
     else:
-        print(f"\n📈 Target: 87% | Got: {results['accuracy']:.1%}")
+        print(f"\n Target: 87% | Got: {results['accuracy']:.1%}")
     
-    print(f"\n📊 Features:")
+    print(f"\n Features:")
     for i, row in predictor.feature_importance.iterrows():
-        bar = "█" * int(row['importance'] * 25)
+        bar = * int(row['importance'] * 25)
         print(f"  {row['feature']:<15} {row['importance']:.1%} {bar}")
     
     # Test
-    print(f"\n🧪 TESTS:")
+    print(f"\n TESTS:")
     high = df[df['risk_score'] >= 3].iloc[0:1]
     pred, prob = predictor.predict(high)
     print(f"  High risk (3): {'CHURN' if pred[0]==1 else 'STAY'} ({prob[0]:.1%})")
@@ -134,5 +131,5 @@ if __name__ == "__main__":
     print(f"  Low risk (0):  {'CHURN' if pred[0]==1 else 'STAY'} ({prob[0]:.1%})")
     
     print("=" * 50)
-    print("✅ DONE!")
+    print(" DONE!")
     print("=" * 50)
